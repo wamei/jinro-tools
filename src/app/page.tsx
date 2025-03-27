@@ -57,7 +57,7 @@ export default function Home() {
     setMemo(users.map((_, index) => `${index + 1}. `).join("\n\n"));
   }, [settings]);
 
-  const uniqueRoles = [
+  const uniqueRoles: Role[] = [
     UserRoles.unknown,
     UserRoles.white,
     UserRoles.black,
@@ -358,11 +358,13 @@ export default function Home() {
                         trigger={
                           <div
                             className={`${
-                              user.status === Status.alive
+                              user.status.name === Status.alive.name
                                 ? "bg-white border-gray-400"
-                                : user.status === Status.bitten
-                                ? "bg-red-400 opacity-50 border-red-400 text-white"
-                                : "bg-gray-400 opacity-50 border-gray-400 text-white"
+                                : user.status.name === Status.bitten.name
+                                ? "bg-red-400 opacity-50 border-transparent text-white"
+                                : user.status.name === Status.hanged.name
+                                ? "bg-gray-400 opacity-50 border-transparent text-white"
+                                : `${user.status.color} opacity-50 border-transparent text-white`
                             } border rounded flex gap-2 p-2 cursor-pointer`}
                             onMouseEnter={() => setActiveUser(index)}
                             onMouseLeave={() => setActiveUser(null)}
@@ -436,13 +438,13 @@ export default function Home() {
                                   key={i}
                                   color="bg-gray-400"
                                   activeColor={
-                                    status === Status.alive
+                                    status.name === Status.alive.name
                                       ? "bg-gray-600"
-                                      : status === Status.bitten
+                                      : status.name === Status.bitten.name
                                       ? "bg-red-400"
                                       : "bg-black"
                                   }
-                                  active={user.status === status}
+                                  active={user.status.name === status.name}
                                   onClick={() => {
                                     setUsers((prev) =>
                                       prev.map((u, j) =>
@@ -451,9 +453,45 @@ export default function Home() {
                                     );
                                   }}
                                 >
-                                  {status}
+                                  {status.name}
                                 </Button>
                               ))}
+                              {uniqueRoles
+                                .filter((role) => role.userStatus)
+                                .map((role, i) => {
+                                  return (
+                                    <Button
+                                      key={i}
+                                      color="bg-gray-400"
+                                      activeColor={role.userStatus?.color}
+                                      active={
+                                        user.status.name ===
+                                        role.userStatus?.name
+                                      }
+                                      onClick={() => {
+                                        setUsers((prev) =>
+                                          prev.map((u, j) =>
+                                            j === index
+                                              ? {
+                                                  ...u,
+                                                  status: {
+                                                    name:
+                                                      role.userStatus?.name ??
+                                                      "",
+                                                    color:
+                                                      role.userStatus?.color ??
+                                                      "",
+                                                  },
+                                                }
+                                              : u
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      {role.userStatus?.name}
+                                    </Button>
+                                  );
+                                })}
                             </div>
                           </div>
                           <div className="flex items-center gap-2">

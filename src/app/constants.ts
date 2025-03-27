@@ -7,6 +7,10 @@ export type Role = {
   name: string;
   color: string;
   text?: string;
+  userStatus?: {
+    name: string;
+    color: string;
+  };
 };
 
 export type User = {
@@ -18,11 +22,22 @@ export type User = {
 };
 
 export const Status = {
-  alive: "生存",
-  bitten: "噛まれ",
-  hanged: "吊られ",
+  alive: {
+    name: "生存",
+    color: "bg-gray-400",
+  },
+  bitten: {
+    name: "噛まれ",
+    color: "bg-red-400",
+  },
+  hanged: {
+    name: "吊られ",
+    color: "bg-gray-400",
+  },
 } as const;
-export type Status = (typeof Status)[keyof typeof Status];
+export type Status =
+  | (typeof Status)[keyof typeof Status]
+  | { name: string; color: string };
 
 export type Line = {
   target: number;
@@ -74,6 +89,10 @@ export const BaseRoles = {
   hunter: {
     name: "ハンター",
     color: Colors.blue,
+    userStatus: {
+      name: "道連れ",
+      color: "bg-blue-300",
+    },
   },
   werewolf: {
     name: "人狼",
@@ -86,6 +105,10 @@ export const BaseRoles = {
   fox: {
     name: "妖狐",
     color: Colors.yellow,
+    userStatus: {
+      name: "呪殺",
+      color: "bg-yellow-300",
+    },
   },
 } as const;
 
