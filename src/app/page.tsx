@@ -88,6 +88,16 @@ export default function Home() {
     );
   }, [circleRef.current, width]);
 
+  const [bodyWidth, setBodyWidth] = useState(0);
+  useEffect(() => {
+    const handleResize = () => {
+      setBodyWidth(document.body.getBoundingClientRect().width);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [activeUser, setActiveUser] = useState<number | null>(null);
 
   return (
@@ -172,8 +182,7 @@ export default function Home() {
                   Math.cos(red * position + Math.PI / 2) * circleR + circleR;
                 const y =
                   Math.sin(red * position + Math.PI / 2) * circleR + circleR;
-                const areaWidth =
-                  document.body.getBoundingClientRect().width ?? 0;
+                const areaWidth = bodyWidth;
                 const diff = areaWidth - x - 720 + width / 2;
                 const offsetX = diff < 0 ? diff : 0;
                 return (
