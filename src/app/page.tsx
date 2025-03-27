@@ -173,8 +173,8 @@ export default function Home() {
                 const y =
                   Math.sin(red * position + Math.PI / 2) * circleR + circleR;
                 const areaWidth =
-                  circleRef.current?.getBoundingClientRect().width ?? 0;
-                const diff = areaWidth - x - 420 + width / 2;
+                  document.body.getBoundingClientRect().width ?? 0;
+                const diff = areaWidth - x - 720 + width / 2;
                 const offsetX = diff < 0 ? diff : 0;
                 return (
                   <Fragment key={index}>
@@ -377,7 +377,7 @@ export default function Home() {
                         offsetY={height + 4}
                         offsetX={offsetX}
                       >
-                        <div className="w-100 flex flex-col gap-2">
+                        <div className="w-150 flex flex-col gap-2">
                           <div className="flex items-center gap-2">
                             <div className="w-[50px]">役職</div>
                             <div className="flex flex-wrap gap-2">
