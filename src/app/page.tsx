@@ -606,9 +606,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="p-4">
+        <div className="p-4 w-auto grow">
           <textarea
-            className="w-150 h-200 border border-gray-400 p-4"
+            className="w-full h-200 border border-gray-400 p-4 resize"
             onChange={(e) => setMemo(e.target.value)}
             value={memo}
           ></textarea>
