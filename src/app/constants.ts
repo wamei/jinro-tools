@@ -12,6 +12,7 @@ export type Role = {
 export type User = {
   role: Role;
   status: Status;
+  deception: DeceptionStatus;
   divinations: Line[];
   lines: Line[];
 };
@@ -34,6 +35,14 @@ export const LineStatus = {
   black: "黒",
 } as const;
 export type LineStatus = (typeof LineStatus)[keyof typeof LineStatus];
+
+export const DeceptionStatus = {
+  unknown: "不明",
+  confirmed: "確定",
+  deception: "騙り",
+} as const;
+export type DeceptionStatus =
+  (typeof DeceptionStatus)[keyof typeof DeceptionStatus];
 
 export const Colors = {
   blue: "#3498db",

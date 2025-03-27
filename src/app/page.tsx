@@ -10,6 +10,7 @@ import {
   Status,
   User,
   UserRoles,
+  DeceptionStatus,
 } from "./constants";
 import { GameSettingsModal } from "./components/GameSettingsModal";
 import Button from "./components/Button";
@@ -35,6 +36,7 @@ export default function Home() {
     settings.roles.map(() => ({
       role: UserRoles.unknown,
       status: Status.alive,
+      deception: DeceptionStatus.unknown,
       divinations: [],
       lines: [],
     }))
@@ -43,9 +45,10 @@ export default function Home() {
   const [memo, setMemo] = useState("");
 
   useEffect(() => {
-    const users = settings.roles.map(() => ({
+    const users: User[] = settings.roles.map(() => ({
       role: UserRoles.unknown,
       status: Status.alive,
+      deception: DeceptionStatus.unknown,
       divinations: [],
       lines: [],
     }));
@@ -365,7 +368,10 @@ export default function Home() {
                             onMouseLeave={() => setActiveUser(null)}
                           >
                             {index + 1}
-                            <RoleBadge role={user.role} />
+                            <RoleBadge
+                              role={user.role}
+                              deception={user.deception}
+                            />
                           </div>
                         }
                         offsetY={height + 4}
@@ -391,6 +397,38 @@ export default function Home() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
+                            <div className="w-[50px]">騙り</div>
+                            <div className="flex flex-wrap gap-2">
+                              {Object.values(DeceptionStatus).map(
+                                (status, i) => (
+                                  <Button
+                                    key={i}
+                                    color="bg-gray-400"
+                                    activeColor={
+                                      status === DeceptionStatus.unknown
+                                        ? "bg-gray-600"
+                                        : status === DeceptionStatus.confirmed
+                                        ? "bg-blue-400"
+                                        : "bg-red-400"
+                                    }
+                                    active={user.deception === status}
+                                    onClick={() => {
+                                      setUsers((prev) =>
+                                        prev.map((u, j) =>
+                                          j === index
+                                            ? { ...u, deception: status }
+                                            : u
+                                        )
+                                      );
+                                    }}
+                                  >
+                                    {status}
+                                  </Button>
+                                )
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
                             <div className="w-[50px]">生死</div>
                             <div className="flex flex-wrap gap-2">
                               {Object.values(Status).map((status, i) => (
@@ -399,7 +437,7 @@ export default function Home() {
                                   color="bg-gray-400"
                                   activeColor={
                                     status === Status.alive
-                                      ? "bg-gray-400"
+                                      ? "bg-gray-600"
                                       : status === Status.bitten
                                       ? "bg-red-400"
                                       : "bg-black"
